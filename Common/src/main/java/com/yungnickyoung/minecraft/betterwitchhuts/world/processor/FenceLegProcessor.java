@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -37,10 +38,10 @@ public class FenceLegProcessor extends StructureProcessor {
             BlockPos.MutableBlockPos mutable = blockInfoGlobal.pos().mutable().move(Direction.DOWN);
             BlockState currBlockState = levelReader.getBlockState(mutable);
 
-            while (mutable.getY() > levelReader.getMinBuildHeight()
-                    && mutable.getY() < levelReader.getMaxBuildHeight()
+            while (mutable.getY() > levelReader.getMinY()
+                    && mutable.getY() < levelReader.getMaxY()
                     && (currBlockState.isAir() || !levelReader.getFluidState(mutable).isEmpty())) {
-                levelReader.getChunk(mutable).setBlockState(mutable, Blocks.OAK_FENCE.withPropertiesOf(blockInfoGlobal.state()), false);
+                levelReader.getChunk(mutable).setBlockState(mutable, Blocks.OAK_FENCE.withPropertiesOf(blockInfoGlobal.state()), 1);
                 mutable.move(Direction.DOWN);
                 currBlockState = levelReader.getBlockState(mutable);
             }
@@ -48,7 +49,7 @@ public class FenceLegProcessor extends StructureProcessor {
         return blockInfoGlobal;
     }
 
-    protected StructureProcessorType<?> getType() {
+    protected @NotNull StructureProcessorType<?> getType() {
         return StructureProcessorTypeModule.FENCE_LEG_PROCESSOR;
     }
 }
